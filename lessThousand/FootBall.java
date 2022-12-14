@@ -23,7 +23,7 @@ public class FootBall{
             System.out.println(d);
         }
         
-        if(d == 1 && a == b){
+        if(n == 1 && a == b){
             System.out.println(a + ":" + b);
         }
         else{
@@ -86,7 +86,7 @@ public class FootBall{
             }
         }
         
-        if(d == 0){
+        if(d == 0 && n != 1){
             for (int j = 0; j < n; j++) {
                 if(j+1 == n){
                     if(score[0][j] == score[1][j]){
