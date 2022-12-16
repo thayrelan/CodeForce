@@ -6,7 +6,7 @@ public class Watermelon {
         int Number = readVar.nextInt();
         boolean isEven = Number%2 == 0 ? true : false;
 
-        if (isEven) {
+        if (isEven && Number!=2) {
             System.out.println("YES");
         } else {
             System.out.println("NO");
