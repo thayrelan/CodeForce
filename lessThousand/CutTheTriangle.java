@@ -1,133 +1,161 @@
 import java.util.Scanner;
 
-
-
 public class CutTheTriangle {
-
+ 
     public static class Triangle{
-        int[] x = new int[3];
-        int[] y = new int[3];
+        private int[] x = new int[3];
+        private int[] y = new int[3];
     
         public int getX(int position) {
             return x[position];
         }
-        public void setX(int position, int value) {
-            this.x[position] = value;
-        }
         public int getY(int position) {
             return y[position];
         }
-        public void setY(int position, int value) {
-            this.y[position] = value;
+        
+        //Get the information regarding the points that make the triangle
+        public void setDomains(Scanner readVar){     
+            readVar.nextLine();
+            this.x[0] = readVar.nextInt();
+            this.y[0] = readVar.nextInt();
+            this.x[1] = readVar.nextInt();
+            this.y[1] = readVar.nextInt();
+            this.x[2] = readVar.nextInt();
+            this.y[2] = readVar.nextInt();
+            
         }
-    }
 
-    public static void main(String[] args){
-        Scanner readVar = new Scanner(System.in);
-        int totalTests = readVar.nextInt();
-        boolean cutIt = false;
-        boolean factor = true;
-        Triangle[] nonDegenerateTriangles = new Triangle[totalTests];
-        String Trash;
+        //Verify if one of the other points is lower or higher than the present one
+        public boolean areDiffX(int i, int j, boolean isLower){
+ 
+            if(isLower){
+                if(this.getX(i) < this.getX(j)){
+                    return true;
+                };
+            }else{
+                if(this.getX(i) > this.getX(j)){
+                    return true;
+                };
+            }
+     
+            return false;
+        }
+        //Verify if one of the other points is lower or higher than the present one
+        public boolean areDiffY(int i, int j, boolean isLower){
+     
+            if(isLower){
+                if(this.getY(i) < this.getY(j)){
+                    return true;
+                };
+            }else{
+                if(this.getY(i) > this.getY(j)){
+                    return true;
+                };
+            }
+     
+            return false;
+        }
     
-        for (int i = 0; i < totalTests; i++) {
-            nonDegenerateTriangles[i] = new Triangle();
-            Trash = readVar.nextLine();
-            nonDegenerateTriangles[i].setX(0, readVar.nextInt());;
-            nonDegenerateTriangles[i].setY(0, readVar.nextInt());;
-            nonDegenerateTriangles[i].setX(1, readVar.nextInt());;
-            nonDegenerateTriangles[i].setY(1, readVar.nextInt());;
-            nonDegenerateTriangles[i].setX(2, readVar.nextInt());;
-            nonDegenerateTriangles[i].setY(2, readVar.nextInt());;
+        //Verify if from the X axes two new triangles can ensurge
+        public boolean compareTriangleDomain(int i, int j, int k){
+    
+            boolean hasDomain = false;
+            boolean hasCodomain = false;
+    
+            hasDomain = areDiffX(i, j, true);
+            hasCodomain = areDiffX(i, k, false);
+            if(hasDomain == true && hasCodomain == true){
+                return true;
+            }
+     
+            hasDomain = areDiffX(i, j, false);
+            hasCodomain = areDiffX(i, k, true);
+            if(hasDomain == true && hasCodomain == true){
+                return true;
+            }
+    
+            return false;
+        }
+        
+        //Verify if from the Y axes two new triangles can ensurge
+        public boolean compareTriangleCodomain(int i, int j, int k){
+    
+            boolean hasDomain = false;
+            boolean hasCodomain = false;
+    
+            hasDomain = areDiffY(i, j, true);
+            hasCodomain = areDiffY(i, k, false);
+            if(hasDomain == true && hasCodomain == true){
+                return true;
+            }
+     
+            hasDomain = areDiffY(i, j, false);
+            hasCodomain = areDiffY(i, k, true);
+            if(hasDomain == true && hasCodomain == true){
+                return true;
+            }
+     
+            return false;
+        }
+        
+        //Verify if from a certain point of a triangle can be produced two new triangles
+        public boolean cutTriangle(int i, int j, int k){
+     
+           boolean halveTriangleX = compareTriangleDomain(i, j, k);
+           boolean halveTriangleY = compareTriangleCodomain(i, j, k);
+           if(halveTriangleX || halveTriangleY){
+                return true;
+           }
+           return false;
+     
         }
 
-        for (int i = 0; i < nonDegenerateTriangles.length; i++) {
-            cutIt = cutTriangle(nonDegenerateTriangles[i], 0, 1, 2);
-            if(cutIt == true && factor == true){
+        //Verify if a triangle can produce two new triangles
+        public void checkCut(){
+
+            boolean canCut = false;
+            boolean hasntCut = true;
+
+            canCut = cutTriangle(0, 1, 2);
+            if(canCut == true && hasntCut == true){
                 System.out.println("YES");
-                factor = false;
+                hasntCut = false;
             }
-            cutIt = cutTriangle(nonDegenerateTriangles[i], 1, 0, 2);
-            if(cutIt == true && factor == true){
+            canCut = cutTriangle(1, 0, 2);
+            if(canCut == true && hasntCut == true){
                 System.out.println("YES");
-                factor = false;
+                hasntCut = false;
             }
-            cutIt = cutTriangle(nonDegenerateTriangles[i], 2, 1, 0);
-            if(cutIt == true && factor == true){
+            canCut = cutTriangle(2, 1, 0);
+            if(canCut == true && hasntCut == true){
                 System.out.println("YES");
             }
-            else if(cutIt == false && factor == true){
+            else if(hasntCut == true){
                 System.out.println("NO");
             }
-            factor = true;
+           
         }
     }
-    public static boolean conditioningTriangleX(int comparer, int compared, boolean type, Triangle nonDegeneratTriangles){
+ 
+    public static void main(String[] args){
 
-        boolean isTrue = false;
+        //Variables
+        Scanner readVar = new Scanner(System.in);
+        int totalTests = readVar.nextInt();
+        Triangle[] nonDegenerateTriangles = new Triangle[totalTests];
 
-        if(type == true){
-            if(nonDegeneratTriangles.getX(comparer) < nonDegeneratTriangles.getX(compared)){
-                isTrue = true;
-                return isTrue;
-            };
-        }else{
-            if(nonDegeneratTriangles.getX(comparer) > nonDegeneratTriangles.getX(compared)){
-                isTrue = true;
-                return isTrue;
-            };
+        
+        
+        //Input
+        for (int i = 0; i < totalTests; i++) {
+            nonDegenerateTriangles[i] = new Triangle();
+            nonDegenerateTriangles[i].setDomains(readVar);
         }
-
-        return isTrue;
-    }
-    public static boolean conditioningTriangleY(int comparer, int compared, boolean type, Triangle nonDegeneratTriangles){
-
-        boolean isTrue = false;
-
-        if(type == true){
-            if(nonDegeneratTriangles.getY(comparer) < nonDegeneratTriangles.getY(compared)){
-                isTrue = true;
-                return isTrue;
-            };
-        }else{
-            if(nonDegeneratTriangles.getY(comparer) > nonDegeneratTriangles.getY(compared)){
-                isTrue = true;
-                return isTrue;
-            };
+        
+        //Output
+        for (int i = 0; i < nonDegenerateTriangles.length; i++) {
+            nonDegenerateTriangles[i].checkCut();
         }
-
-        return isTrue;
-    }
-    public static boolean cutTriangle(Triangle nonDegeneratTriangles, int i, int j, int k){
-
-        boolean isPossible = false;
-        boolean isPossibleToo = false;
-
-        isPossible = conditioningTriangleX(i, j, true, nonDegeneratTriangles);
-        isPossibleToo = conditioningTriangleX(i, k, false, nonDegeneratTriangles);
-        if(isPossible == true && isPossibleToo == true){
-            return true;
-        }
-
-        isPossible = conditioningTriangleX(i, j, false, nonDegeneratTriangles);
-        isPossibleToo = conditioningTriangleX(i, k, true, nonDegeneratTriangles);
-        if(isPossible == true && isPossibleToo == true){
-            return true;
-        }
-
-        isPossible = conditioningTriangleY(i, j, true, nonDegeneratTriangles);
-        isPossibleToo = conditioningTriangleY(i, k, false, nonDegeneratTriangles);
-        if(isPossible == true && isPossibleToo == true){
-            return true;
-        }
-
-        isPossible = conditioningTriangleY(i, j, false, nonDegeneratTriangles);
-        isPossibleToo = conditioningTriangleY(i, k, true, nonDegeneratTriangles);
-        if(isPossible == true && isPossibleToo == true){
-            return true;
-        }
-
-        return false;
-
-    }
+    } 
+    
 }
