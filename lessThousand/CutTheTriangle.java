@@ -31,11 +31,11 @@ public class CutTheTriangle {
             if(isLower){
                 if(this.getX(i) < this.getX(j)){
                     return true;
-                };
+                }
             }else{
                 if(this.getX(i) > this.getX(j)){
                     return true;
-                };
+                }
             }
      
             return false;
@@ -46,11 +46,11 @@ public class CutTheTriangle {
             if(isLower){
                 if(this.getY(i) < this.getY(j)){
                     return true;
-                };
+                }
             }else{
                 if(this.getY(i) > this.getY(j)){
                     return true;
-                };
+                }
             }
      
             return false;
@@ -85,13 +85,13 @@ public class CutTheTriangle {
     
             hasDomain = areDiffY(i, j, true);
             hasCodomain = areDiffY(i, k, false);
-            if(hasDomain == true && hasCodomain == true){
+            if(hasDomain && hasCodomain){
                 return true;
             }
      
             hasDomain = areDiffY(i, j, false);
             hasCodomain = areDiffY(i, k, true);
-            if(hasDomain == true && hasCodomain == true){
+            if(hasDomain && hasCodomain){
                 return true;
             }
      
